@@ -34,40 +34,6 @@ export default function Preference() {
     fetchPreferences();
   }, []);
 
-  const handleDelete = async (id) => {
-    const confirm = await Swal.fire({
-      title: "Apakah Anda yakin?",
-      text: "Preferensi Anda akan dihapus secara permanen!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Ya, hapus!",
-      cancelButtonText: "Batal",
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        await phase2Api.delete(`/preference/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        });
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil",
-          text: "Preferensi Anda telah dihapus.",
-        });
-        setPreferences(preferences.filter((pref) => pref.id !== id));
-      } catch (error) {
-        console.error("Error deleting preferences:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Gagal",
-          text: "Gagal menghapus preferensi.",
-        });
-      }
-    }
-  };
-
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -96,7 +62,6 @@ export default function Preference() {
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border px-4 py-2">ID</th>
             <th className="border px-4 py-2">Location</th>
             <th className="border px-4 py-2">Job</th>
             <th className="border px-4 py-2">Degree</th>
@@ -107,7 +72,6 @@ export default function Preference() {
         <tbody>
           {preferences.map((pref) => (
             <tr key={pref.id} className="text-center border-t">
-              <td className="border px-4 py-2">{pref.id}</td>
               <td className="border px-4 py-2">{pref.location}</td>
               <td className="border px-4 py-2">{pref.job}</td>
               <td className="border px-4 py-2">{pref.degree}</td>
@@ -116,12 +80,6 @@ export default function Preference() {
                 <Link to={`/home/preference/edit/${pref.id}`}>
                   <button className="btn btn-primary m-2">Edit</button>
                 </Link>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(pref.id)}
-                >
-                  Delete
-                </button>
               </td>
             </tr>
           ))}
