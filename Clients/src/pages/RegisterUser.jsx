@@ -2,8 +2,6 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import { phase2Api } from "../helpers/http-clients";
-import { forwardRef } from "react";
-import { response } from "../../../Server/app";
 
 export default function RegisterUser() {
   // State to track current step\
