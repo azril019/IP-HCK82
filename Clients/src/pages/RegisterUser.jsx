@@ -1,140 +1,42 @@
-import { useState } from "react";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router";
-import { phase2Api } from "../helpers/http-clients";
-
 export default function RegisterUser() {
-  // State to track current step\
-  const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
-
-  // State for form data
-  const [formUser, setFormUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [formPreferences, setFormPreferences] = useState({
-    job: "",
-    location: "",
-    degree: "",
-  });
-
-  // Handle input changes for all form fields
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormUser({
-      ...formUser,
-      [name]: value,
-    });
-    setFormPreferences({
-      ...formPreferences,
-      [name]: value,
-    });
-  };
-
-  // Move to next step
-  const handleNextStep = async (e) => {
-    e.preventDefault();
-    // Validate step 1 fields
-    if (currentStep === 1) {
-      if (!formUser.name || !formUser.email || !formUser.password) {
-        Swal.fire({
-          icon: "error",
-          title: "Form tidak lengkap",
-          text: "Mohon lengkapi semua field yang diperlukan",
-        });
-        return;
-      } else {
-        await phase2Api.post("register", formUser);
-        const response = await phase2Api.post("/login", { email, password });
-        localStorage.setItem("access_token", response.data.access_token);
-      }
-      setCurrentStep(2);
-    } else {
-      // Submit the form
-      handleSubmit(e);
-    }
-  };
-
-  // Go back to previous step
-  const handlePrevStep = (e) => {
-    e.preventDefault();
-    setCurrentStep(1);
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // Use formUser object properties
-      await phase2Api.post("/preference", formPreferences);
-      Swal.fire({
-        icon: "success",
-        title: "Berhasil",
-        text: "User berhasil didaftarkan!",
-      });
-      navigate("/");
-    } catch (error) {
-      console.error("🚀 ~ handleSubmit ~ error:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: error.response?.data?.message || "Terjadi kesalahan!",
-      });
-    }
-  };
-
   return (
     <>
       <div className="formbold-main-wrapper">
         <div className="formbold-form-wrapper">
-          <form onSubmit={handleSubmit}>
+          <form action="https://formbold.com/s/FORM_ID" method="POST">
             <div className="formbold-steps">
               <ul>
-                <li
-                  className={`formbold-step-menu1 ${
-                    currentStep === 1 ? "active" : ""
-                  }`}
-                >
+                <li className="formbold-step-menu1 active">
                   <span>1</span>
                   Sign Up
                 </li>
-                <li
-                  className={`formbold-step-menu2 ${
-                    currentStep === 2 ? "active" : ""
-                  }`}
-                >
+                <li className="formbold-step-menu2">
                   <span>2</span>
                   Preferences
                 </li>
               </ul>
             </div>
-            <div
-              className={`formbold-form-step-1 ${
-                currentStep === 1 ? "active" : ""
-              }`}
-            >
+            <div className="formbold-form-step-1 active">
               <div className="formbold-input-flex">
                 <div>
-                  <label htmlFor="name" className="formbold-form-label">
-                    Full name
+                  <label htmlFor="firstname" className="formbold-form-label">
+                    {" "}
+                    Full name{" "}
                   </label>
                   <input
                     type="text"
-                    name="name"
+                    name="firstname"
                     placeholder="Andrio"
-                    id="name"
+                    id="firstname"
                     className="formbold-form-input"
-                    value={formUser.name}
-                    onChange={handleChange}
                   />
                 </div>
               </div>
               <div className="formbold-input-flex">
                 <div>
                   <label htmlFor="email" className="formbold-form-label">
-                    Email Address
+                    {" "}
+                    Email Address{" "}
                   </label>
                   <input
                     type="email"
@@ -142,13 +44,12 @@ export default function RegisterUser() {
                     placeholder="example@mail.com"
                     id="email"
                     className="formbold-form-input"
-                    value={formUser.email}
-                    onChange={handleChange}
                   />
                 </div>
                 <div>
-                  <label htmlFor="password" className="formbold-form-label">
-                    Password
+                  <label htmlFor="dob" className="formbold-form-label">
+                    {" "}
+                    Password{" "}
                   </label>
                   <input
                     type="password"
@@ -156,96 +57,73 @@ export default function RegisterUser() {
                     name="password"
                     id="password"
                     className="formbold-form-input"
-                    value={formUser.password}
-                    onChange={handleChange}
                   />
                 </div>
               </div>
             </div>
-            <div
-              className={`formbold-form-step-2 ${
-                currentStep === 2 ? "active" : ""
-              }`}
-            >
+            <div className="formbold-form-step-2">
               <div className="formbold-input-flex">
                 <div>
                   <label htmlFor="job" className="formbold-form-label">
-                    Job
+                    {" "}
+                    Job{" "}
                   </label>
                   <input
-                    type="text"
+                    type="job"
                     name="job"
                     id="job"
                     className="formbold-form-input"
-                    value={formPreferences.job}
-                    onChange={handleChange}
                   />
                 </div>
                 <div>
                   <label htmlFor="location" className="formbold-form-label">
-                    Location
+                    {" "}
+                    Location{" "}
                   </label>
                   <input
-                    type="text"
+                    type="location"
                     name="location"
                     id="location"
                     className="formbold-form-input"
-                    value={formPreferences.location}
-                    onChange={handleChange}
                   />
                 </div>
                 <div>
                   <label htmlFor="degree" className="formbold-form-label">
-                    Degree
+                    {" "}
+                    Degree{" "}
                   </label>
                   <input
-                    type="text"
+                    type="degree"
                     name="degree"
                     id="degree"
                     className="formbold-form-input"
-                    value={formPreferences.degree}
-                    onChange={handleChange}
                   />
                 </div>
               </div>
             </div>
             <div className="formbold-form-btn-wrapper">
-              <button
-                className={`formbold-back-btn ${
-                  currentStep === 2 ? "active" : ""
-                }`}
-                onClick={handlePrevStep}
-                type="button"
-              >
-                Back
-              </button>
-              <button
-                className="formbold-btn"
-                onClick={handleNextStep}
-                type="button"
-              >
-                {currentStep === 1 ? "Next Step" : "Submit"}
-                {currentStep === 1 && (
-                  <svg
-                    width={16}
-                    height={16}
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_1675_1807)">
-                      <path
-                        d="M10.7814 7.33312L7.20541 3.75712L8.14808 2.81445L13.3334 7.99979L8.14808 13.1851L7.20541 12.2425L10.7814 8.66645H2.66675V7.33312H10.7814Z"
-                        fill="white"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_1675_1807">
-                        <rect width={16} height={16} fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                )}
+              <button className="formbold-back-btn">Back</button>
+              <button className="formbold-btn">
+                Next Step
+                <svg
+                  width={16}
+                  height={16}
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clipPath="url(#clip0_1675_1807)">
+                    <path
+                      d="M10.7814 7.33312L7.20541 3.75712L8.14808 2.81445L13.3334 7.99979L8.14808 13.1851L7.20541 12.2425L10.7814 8.66645H2.66675V7.33312H10.7814Z"
+                      fill="white"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_1675_1807">
+                      <rect width={16} height={16} fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
               </button>
             </div>
           </form>

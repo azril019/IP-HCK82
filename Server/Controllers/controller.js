@@ -45,7 +45,6 @@ class Controller {
   static async addPreference(req, res, next) {
     try {
       const { id } = req.user;
-
       const preference = await Preference.create({
         ...req.body,
         userId: id,

@@ -11,7 +11,6 @@ class UserController {
         password,
         name,
       });
-
       console.log("🚀 ~ UserController ~ register ~ user:", user);
       res.status(201).json({
         id: user.id,
