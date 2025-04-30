@@ -2,50 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { phase2Api } from "../helpers/http-clients";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 export default function AddPreference() {
-  const jobCategory = [
-    "Accounting",
-    "Administrative",
-    "Arts and Design",
-    "Business Development",
-    "Community and Social Services",
-    "Consulting",
-    "Education",
-    "Engineering",
-    "Entrepreneurship",
-    "Finance",
-    "Healthcare Services",
-    "Human Resources",
-    "Information Technology",
-    "Legal",
-    "Marketing",
-    "Media and Communication",
-    "Military and Protective Services",
-    "Operations",
-    "Product Management",
-    "Program and Project Management",
-    "Purchasing",
-    "Quality Assurance",
-    "Real Estate",
-    "Research",
-    "Sales",
-    "Support",
-    "Training",
-    "Writing and Editing",
-  ];
-
-  const degrees = [
-    "Associate's Degree",
-    "Bachelor's Degree",
-    "Master's Degree",
-    "Doctoral Degree",
-    "Professional Degree",
-    "High School Diploma",
-    "Certificate",
-    "Diploma",
-    "Other",
-  ];
+  // Mengambil jobCategory dan degrees dari Redux store
+  const { jobCategory, degrees } = useSelector((state) => state.preferences);
 
   const [formData, setFormData] = useState({
     location: "",

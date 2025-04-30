@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { phase2Api } from "../helpers/http-clients";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 export default function EditPreference() {
   const [formData, setFormData] = useState({
@@ -15,48 +16,7 @@ export default function EditPreference() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const jobCategory = [
-    "Accounting",
-    "Administrative",
-    "Arts and Design",
-    "Business Development",
-    "Community and Social Services",
-    "Consulting",
-    "Education",
-    "Engineering",
-    "Entrepreneurship",
-    "Finance",
-    "Healthcare Services",
-    "Human Resources",
-    "Information Technology",
-    "Legal",
-    "Marketing",
-    "Media and Communication",
-    "Military and Protective Services",
-    "Operations",
-    "Product Management",
-    "Program and Project Management",
-    "Purchasing",
-    "Quality Assurance",
-    "Real Estate",
-    "Research",
-    "Sales",
-    "Support",
-    "Training",
-    "Writing and Editing",
-  ];
-
-  const degrees = [
-    "Associate's Degree",
-    "Bachelor's Degree",
-    "Master's Degree",
-    "Doctoral Degree",
-    "Professional Degree",
-    "High School Diploma",
-    "Certificate",
-    "Diploma",
-    "Other",
-  ];
+  const { jobCategory, degrees } = useSelector((state) => state.preferences);
 
   useEffect(() => {
     const fetchPreference = async () => {
