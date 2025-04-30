@@ -59,12 +59,12 @@ app.post("/google-login", async (req, res, next) => {
   }
 });
 
-app.post("/register", UserController.register, Controller.addPreference);
+app.post("/register", UserController.register);
 app.post("/login", UserController.login);
-app.post("/preference", Controller.addPreference);
 app.use(authentication);
 app.get("/profile", Controller.getProfile);
 app.delete("/profile", Controller.deleteProfile);
+app.post("/preference", Controller.addPreference);
 app.put("/preference/:id", Controller.editPreference);
 app.get("/preference", Controller.getPreference);
 app.delete("/preference/:id", Controller.deletePreference);
