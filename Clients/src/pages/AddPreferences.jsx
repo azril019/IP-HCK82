@@ -34,6 +34,7 @@ export default function AddPreference() {
     "Training",
     "Writing and Editing",
   ];
+
   const degrees = [
     "Associate's Degree",
     "Bachelor's Degree",
@@ -45,12 +46,14 @@ export default function AddPreference() {
     "Diploma",
     "Other",
   ];
+
   const [formData, setFormData] = useState({
     location: "",
     job: "",
     degree: "",
     skill: "",
   });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -87,93 +90,175 @@ export default function AddPreference() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Tambah Preference</h1>
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-4">
-        <div className="mb-4">
-          <label
-            htmlFor="location"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Location
-          </label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            placeholder="Masukkan lokasi preferensi"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="job"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Job
-          </label>
-          <select
-            id="job"
-            name="job"
-            value={formData.job}
-            onChange={handleChange}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          >
-            <option value="">Pilih kategori pekerjaan</option>
-            {jobCategory.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="degree"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Degree
-          </label>
-          <select
-            id="degree"
-            name="degree"
-            value={formData.degree}
-            onChange={handleChange}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          >
-            <option value="">Pilih gelar pendidikan</option>
-            {degrees.map((degree) => (
-              <option key={degree} value={degree}>
-                {degree}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="skill"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Skill
-          </label>
-          <input
-            type="text"
-            id="skill"
-            name="skill"
-            value={formData.skill}
-            onChange={handleChange}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            placeholder="Masukkan keterampilan"
-          />
-        </div>
-        <div className="flex justify-end">
-          <button type="submit" className="btn btn-primary">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+        <div className="p-8">
+          <h2 className="text-2xl font-bold text-center text-[#6a64f1] mb-6">
             Tambah Preferensi
-          </button>
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="location"
+                className="text-sm font-medium text-gray-700 block mb-2"
+              >
+                Location
+              </label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="Masukkan lokasi preferensi"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="job"
+                className="text-sm font-medium text-gray-700 block mb-2"
+              >
+                Job
+              </label>
+              <select
+                id="job"
+                name="job"
+                value={formData.job}
+                onChange={handleChange}
+                className="select-field"
+                required
+              >
+                <option value="">Pilih kategori pekerjaan</option>
+                {jobCategory.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="degree"
+                className="text-sm font-medium text-gray-700 block mb-2"
+              >
+                Degree
+              </label>
+              <select
+                id="degree"
+                name="degree"
+                value={formData.degree}
+                onChange={handleChange}
+                className="select-field"
+                required
+              >
+                <option value="">Pilih gelar pendidikan</option>
+                {degrees.map((degree) => (
+                  <option key={degree} value={degree}>
+                    {degree}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="skill"
+                className="text-sm font-medium text-gray-700 block mb-2"
+              >
+                Skill
+              </label>
+              <input
+                type="text"
+                id="skill"
+                name="skill"
+                value={formData.skill}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="Masukkan keterampilan"
+                required
+              />
+            </div>
+
+            <div className="flex justify-between mt-8">
+              <button
+                type="button"
+                onClick={() => navigate("/home/preference")}
+                className="custom-button-outline"
+              >
+                Kembali
+              </button>
+              <button type="submit" className="custom-button">
+                Simpan Preferensi
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
+
+      <style jsx>{`
+        .input-field {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.375rem;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+        }
+        .input-field:focus {
+          outline: none;
+          border-color: #6a64f1;
+          box-shadow: 0 0 0 3px rgba(106, 100, 241, 0.15);
+        }
+        .select-field {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.375rem;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+          appearance: menulist;
+        }
+        .select-field:focus {
+          outline: none;
+          border-color: #6a64f1;
+          box-shadow: 0 0 0 3px rgba(106, 100, 241, 0.15);
+        }
+        .custom-button {
+          background-color: #6a64f1;
+          border: none;
+          color: white;
+          padding: 0.5rem 1.25rem;
+          border-radius: 0.375rem;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .custom-button:hover {
+          background-color: #5a54d1;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 10px rgba(106, 100, 241, 0.3);
+        }
+        .custom-button-outline {
+          background-color: transparent;
+          border: 1px solid #6a64f1;
+          color: #6a64f1;
+          padding: 0.5rem 1.25rem;
+          border-radius: 0.375rem;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .custom-button-outline:hover {
+          background-color: rgba(106, 100, 241, 0.1);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 10px rgba(106, 100, 241, 0.15);
+        }
+      `}</style>
     </div>
   );
 }
