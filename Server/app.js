@@ -73,8 +73,4 @@ app.get("/external-data/:id", Controller.getExternalData);
 
 app.use(errorHandlers);
 
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`);
-// });
-
 module.exports = app;

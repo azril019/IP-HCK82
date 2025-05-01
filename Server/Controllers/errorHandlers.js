@@ -7,6 +7,9 @@ function errorHandlers(err, req, res, next) {
     case "BadRequest":
       res.status(400).json({ message: err.message });
       return;
+    case "JsonWebTokenError":
+      res.status(401).json({ message: "Invalid token" });
+      return;
     case "Unauthorized":
       res.status(401).json({ message: err.message });
       return;
@@ -15,9 +18,6 @@ function errorHandlers(err, req, res, next) {
       return;
     case "NotFound":
       res.status(404).json({ message: err.message });
-      return;
-    case "JsonWebTokenError":
-      res.status(401).json({ message: "Invalid token" });
       return;
     default:
       res.status(500).json({ message: `We're experiencing new error` });
