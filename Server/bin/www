@@ -8,3 +8,21 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Example app listening on PORT ${PORT}`);
 });
+
+module.exports = {
+  apps: [
+    {
+      name: "IP-HCK82-server",
+      script: "bin/www",
+      env: {
+        NODE_ENV: "production",
+        PORT: 80,
+        JWT_SECRET: "Hacktiv82",
+        DATABASE_URL: "postgresql://postgres.nfsovaojrvobohrcdfno:e1F6pVKlXLo3VRqC@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres",
+        GEMINI_API_KEY: "AIzaSyC7Dn76Of8eYLOCPQiDuY7X9RWi8evyV1E",
+        GOOGLE_CLIENT_ID: "135529655751-6qaad5q2n8uesmkpd7qa86onr6oejmh4.apps.googleusercontent.com",
+        GOOGLE_CLIENT_SECRET: "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",
+      },
+    },
+  ],
+};

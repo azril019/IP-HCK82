@@ -1,10 +1,10 @@
-require("dotenv").config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
-const port = 3000;
-// if (process.env.NODE_ENV !== "production") {
-//   require("dotenv").config();
-// }
+// const port = 3000;
 const UserController = require("./Controllers/UserController");
 const Controller = require("./Controllers/controller");
 const authentication = require("./middlewares/authentication");
@@ -73,8 +73,8 @@ app.get("/external-data/:id", Controller.getExternalData);
 
 app.use(errorHandlers);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`);
+// });
 
 module.exports = app;

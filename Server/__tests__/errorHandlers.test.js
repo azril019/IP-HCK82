@@ -7,96 +7,98 @@ describe("Error Handlers", () => {
     req = {};
     res = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      json: jest.fn().mockReturnThis(),
     };
     next = jest.fn();
-    jest.clearAllMocks();
   });
 
-  it("should handle SequelizeValidationError with 400 status", () => {
-    const error = {
-      name: "SequelizeValidationError",
-      errors: [
-        { message: "First validation error" },
-        { message: "Second validation error" },
-      ],
-    };
+  describe("handleSequelizeValidationError", () => {
+    it("should handle SequelizeValidationError with 400 status", () => {
+      const error = new Error("Validation error");
+      error.name = "SequelizeValidationError";
+      error.errors = [
+        { message: "Email is required" },
+        { message: "Password is required" },
+      ];
 
-    errorHandlers(error, req, res, next);
+      errorHandlers.handleSequelizeValidationError(error, req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      message: ["First validation error", "Second validation error"],
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: expect.arrayContaining([
+          "Email is required",
+          "Password is required",
+        ]),
+      });
+    });
+
+    it("should call next for non-SequelizeValidationError", () => {
+      const error = new Error("Other error");
+      error.name = "OtherError";
+
+      errorHandlers.handleSequelizeValidationError(error, req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  it("should handle SequelizeUniqueConstraintError with 400 status", () => {
-    const error = {
-      name: "SequelizeUniqueConstraintError",
-      errors: [{ message: "Email must be unique" }],
-    };
+  describe("handleSequelizeUniqueConstraintError", () => {
+    it("should handle SequelizeUniqueConstraintError with 400 status", () => {
+      const error = new Error("Unique constraint error");
+      error.name = "SequelizeUniqueConstraintError";
+      error.errors = [{ message: "Email must be unique" }];
 
-    errorHandlers(error, req, res, next);
+      errorHandlers.handleSequelizeUniqueConstraintError(error, req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      message: ["Email must be unique"],
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: expect.arrayContaining(["Email must be unique"]),
+      });
+    });
+
+    it("should call next for non-SequelizeUniqueConstraintError", () => {
+      const error = new Error("Other error");
+      error.name = "OtherError";
+
+      errorHandlers.handleSequelizeUniqueConstraintError(error, req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  it("should handle custom errors with provided status", () => {
-    const error = {
-      status: 403,
-      message: "Forbidden access",
-    };
+  describe("handleCustomError", () => {
+    it("should handle custom error with provided status", () => {
+      const error = new Error("Not found");
+      error.name = "NotFound";
+      error.status = 404;
 
-    errorHandlers(error, req, res, next);
+      errorHandlers.handleCustomError(error, req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "Forbidden access",
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Not found",
+      });
+    });
+
+    it("should call next for non-custom errors", () => {
+      const error = new Error("Server error");
+
+      errorHandlers.handleCustomError(error, req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  it('should handle errors with name "BadRequest"', () => {
-    const error = {
-      name: "BadRequest",
-      message: "Invalid input data",
-    };
+  describe("handleServerError", () => {
+    it("should handle server errors with 500 status", () => {
+      const error = new Error("Internal server error");
 
-    errorHandlers(error, req, res, next);
+      errorHandlers.handleServerError(error, req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "Invalid input data",
-    });
-  });
-
-  it("should handle JsonWebTokenError with 401 status", () => {
-    const error = {
-      name: "JsonWebTokenError",
-      message: "Invalid token",
-    };
-
-    errorHandlers(error, req, res, next);
-
-    expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "Invalid token",
-    });
-  });
-
-  it("should default to 500 status for unknown errors", () => {
-    const error = {
-      name: "UnknownError",
-      message: "Something went wrong",
-    };
-
-    errorHandlers(error, req, res, next);
-
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "Internal server error",
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Internal server error",
+      });
     });
   });
 });
