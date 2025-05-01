@@ -25,9 +25,12 @@ export default function LoginPage() {
     console.log("Encoded JWT ID Token: " + response.credential);
     setLoading(true);
     try {
-      const result = await axios.post("http://localhost:3000/google-login", {
-        googleToken: response.credential,
-      });
+      const result = await axios.post(
+        "https://iphck82-server.azriltdkso.fun/google-login",
+        {
+          googleToken: response.credential,
+        }
+      );
 
       localStorage.setItem("access_token", result.data.access_token);
 
