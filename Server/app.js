@@ -25,17 +25,17 @@ app.get("/", (req, res) => {
 app.post("/google-login", async (req, res, next) => {
   const { googleToken } = req.body;
   if (!googleToken) {
-    throw { name: "BadRequest", message: "Google token is required" };
+    return res.status(400).json({ message: "Google token is required" });
   }
   try {
     const ticket = await client.verifyIdToken({
       idToken: googleToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
-    console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+    // console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID); // Remove or comment this line
     const payload = ticket.getPayload();
     if (!payload || !payload.email_verified) {
-      throw { name: "BadRequest", message: "Invalid google token" };
+      return res.status(400).json({ message: "Invalid google token" });
     }
     const [user, created] = await User.findOrCreate({
       where: { email: payload.email },
@@ -54,8 +54,8 @@ app.post("/google-login", async (req, res, next) => {
       .status(created ? 201 : 200)
       .json({ message: "Success login with google", access_token });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-    next(error);
+    // Don't call next() after sending a response
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 

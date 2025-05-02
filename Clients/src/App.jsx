@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import LandingPage from "./pages/LandingPage";
-import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import AppLayout from "./layouts/AppLayout";
 import JobCard from "./components/JobCard";

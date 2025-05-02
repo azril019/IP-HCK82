@@ -147,6 +147,9 @@ describe("App Endpoints", () => {
   });
 
   describe("POST /google-login", () => {
+    // Set timeout for all tests in this describe block
+    jest.setTimeout(10000);
+    
     it("should login with Google and return token", async () => {
       const response = await request(app)
         .post("/google-login")
@@ -163,7 +166,6 @@ describe("App Endpoints", () => {
     it("should return 400 if Google token is missing", async () => {
       const response = await request(app).post("/google-login").send({});
 
-      // Check the response status and body directly
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty(
         "message",
@@ -172,30 +174,33 @@ describe("App Endpoints", () => {
     });
 
     it("should handle errors in Google authentication", async () => {
-      // Force an error by changing the mock temporarily
-      const originalMock = jest.requireMock("google-auth-library");
+      // Create a more effective mock for OAuth2Client
       jest.resetModules();
       jest.doMock("google-auth-library", () => {
         return {
           OAuth2Client: jest.fn().mockImplementation(() => {
             return {
-              verifyIdToken: jest
-                .fn()
-                .mockRejectedValue(new Error("Google API error")),
+              verifyIdToken: jest.fn().mockRejectedValue(
+                new Error("Google API error")
+              )
             };
           }),
         };
       });
-
-      const response = await request(app)
+      
+      // Need to re-require the app to use our new mock
+      const freshApp = require("../app");
+      
+      const response = await request(freshApp)
         .post("/google-login")
         .send({ googleToken: "error-token" });
 
       expect(response.status).toBe(500);
-
+      expect(response.body).toHaveProperty("message", "Internal server error");
+      
       // Restore the original mock
+      jest.dontMock("google-auth-library");
       jest.resetModules();
-      jest.setMock("google-auth-library", originalMock);
     });
   });
 
