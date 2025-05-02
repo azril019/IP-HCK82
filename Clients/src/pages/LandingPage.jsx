@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -19,9 +20,9 @@ export default function LandingPage() {
                 Gunakan teknologi AI untuk menemukan pekerjaan yang sesuai
                 dengan keterampilan dan pengalaman Anda.
               </p>
-              <a href="/register" className="btn btn-lg custom-button">
+              <Link to={"/register"} className="btn btn-lg custom-button">
                 Mulai Sekarang
-              </a>
+              </Link>
             </div>
           </div>
         </div>
