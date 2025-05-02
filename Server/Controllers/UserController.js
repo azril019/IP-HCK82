@@ -11,15 +11,13 @@ class UserController {
         password,
         name,
       });
-      console.log("🚀 ~ UserController ~ register ~ user:", user);
       res.status(201).json({
         id: user.id,
         email: user.email,
         name: user.name,
       });
-    } catch (error) {
-      console.log("🚀 ~ UserController ~ register ~ error:", error);
-      next(error); // Gunakan next() untuk meneruskan error
+    } catch (err) {
+      next(err);
     }
   }
 
@@ -41,9 +39,8 @@ class UserController {
       }
       const access_token = signToken({ id: user.id, email: user.email });
       res.status(200).json({ access_token });
-    } catch (error) {
-      console.log("🚀 ~ UserController ~ login ~ error:", error);
-      next(error); // Gunakan next() untuk meneruskan error
+    } catch (err) {
+      next(err);
     }
   }
 }

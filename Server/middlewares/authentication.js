@@ -8,6 +8,12 @@ const authentication = async (req, res, next) => {
     return;
   }
 
+  // Check if it's a Bearer token
+  if (!bearerToken.startsWith("Bearer ")) {
+    next({ name: "Unauthorized", message: "Invalid token" });
+    return;
+  }
+
   const [, token] = bearerToken.split(" ");
   if (!token) {
     next({ name: "Unauthorized", message: "Invalid token" });

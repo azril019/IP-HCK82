@@ -1,36 +1,21 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import JobCard from "../components/JobCard";
-import { phase2Api } from "../helpers/http-clients";
 import { Link, useNavigate } from "react-router";
+import { fetchJobs } from "../features/jobs/jobsSlice";
 
 export default function Home() {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const { jobs, loading, error } = useSelector((state) => state.jobs);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await phase2Api.get("/external-data/1", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        });
-        setJobs(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching jobs:", err);
-        setError(
-          err.response?.data?.message || "Terjadi kesalahan saat mengambil data"
-        );
+    dispatch(fetchJobs())
+      .unwrap()
+      .catch(() => {
         navigate("/home/preference");
-        setLoading(false);
-      }
-    };
-
-    fetchJobs();
-  }, []);
+      });
+  }, [dispatch, navigate]);
 
   if (loading) {
     return (

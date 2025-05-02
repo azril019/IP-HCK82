@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "npx jest --verbose --detectOpenHandles --forceExit --runInBand --coverage",
+    "test:user": "npx jest userController",
+    "test:auth": "npx jest authentication",
+    "test:controller": "npx jest controller",
+    "test:google": "npx jest googleLogin"
   },
   "keywords": [],
   "author": "",
